@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Information of data available in the emergency system">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Emergency, Vehicle, Navigation , System, Levels, Data">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <title>Levels of Data</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet">
+  <!--external css-->
+  <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/style-responsive.css" rel="stylesheet">
+  <link href="vendor/css/main.css" media="screen,projection" type="text/css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- Fusion Charts -->
+  <script type="text/javascript" src="fusioncharts/fusioncharts.js"></script>
+  <script type="text/javascript" src="fusioncharts/themes/fusioncharts.theme.fint.js"></script>
+  <script type="text/javascript" src="fusioncharts/guage.min.js"></script>
+  <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62496983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  <script src="resources/js/raphael.2.1.0.min.js"></script>
+  <script src="resources/js/justgage.1.0.1.min.js"></script>
+
+  <!-- Fusion -->
+
+  <script src="https://cdn.localizejs.com/localize.js"></script>
+  <script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+  <script>
+  Localize.initialize({
+    key: 'h8lLe6cTYL2eN',
+    rememberLanguage: true,
+    saveNewPhrases: true,
+    translateBody: true
+  });
+  Localize.setLanguage('en');
+  </script>
+</head>
+
+<body>
+  <!-- Modal -->
+  <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myphone" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Phone</h4>
+        </div>
+        <div class="modal-body">
+          <div class="dialpad compact">
+            <div class="number"></div>
+            <div class="dials">
+              <ol>
+                <li class="digits"><p><strong>1</strong></p></li>
+                <li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+                <li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+                <li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+                <li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+                <li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+                <li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+                <li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+                <li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+                <li class="digits"><p><strong>*</strong></p></li>
+                <li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+                <li class="digits"><p><strong>#</strong></p></li>
+                <li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Clear</sup></p></li>
+                <li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Delete</sup></p></li>
+                <li class="digits pad-action"><a href="#"><p><strong><i class="fa fa-phone"></i></strong> <sup>Cal
+                  l</sup></p></a></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer centered">
+            <button data-dismiss="modal" class="btn btn-theme04" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal -->
+    <section id="container" >
+      <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+      <!--header start-->
+      <header class="header black-bg">
+        <div class="sidebar-toggle-box">
+          <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <!--logo start-->
+         <a href="index" class="logo"><h1>SocioNavigation</h1></a>
+        <!--logo end-->
+        <div class="nav notify-row" id="top_menu">
+          <!--  notification start -->
+          <ul class="nav top-menu">
+            <!-- settings start -->
+            <li class="dropdown">
+              <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                <i class="fa fa-tasks"></i>
+                <span class="badge bg-theme">4</span>
+              </a>
+              <ul class="dropdown-menu extended tasks-bar">
+                <div class="notify-arrow notify-arrow-green"></div>
+                <li>
+                  <p class="green">You have 4 pending tasks</p>
+                </li>
+                <li>
+                  <a href="index">
+                    <div class="task-info">
+                      <div class="desc">SocioNavigation Admin Panel</div>
+                      <div class="percent">40%</div>
+                    </div>
+                    <div class="progress progress-striped">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                        <span class="sr-only">40% Complete (success)</span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <div class="task-info">
+                      <div class="desc">Database Update</div>
+                      <div class="percent">60%</div>
+                    </div>
+                    <div class="progress progress-striped">
+                      <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                        <span class="sr-only">60% Complete (warning)</span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <div class="task-info">
+                      <div class="desc">Product Development</div>
+                      <div class="percent">80%</div>
+                    </div>
+                    <div class="progress progress-striped">
+                      <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                        <span class="sr-only">80% Complete</span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <div class="task-info">
+                      <div class="desc">Payments Sent</div>
+                      <div class="percent">70%</div>
+                    </div>
+                    <div class="progress progress-striped">
+                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                        <span class="sr-only">70% Complete (Important)</span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="external">
+                  <a href="#">See All Tasks</a>
+                </li>
+              </ul>
+            </li>
+            <!-- settings end -->
+            <!-- inbox dropdown start-->
+            <li id="header_inbox_bar" class="dropdown">
+              <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                <i class="fa fa-envelope-o"></i>
+                <span class="badge bg-theme">5</span>
+              </a>
+              <ul class="dropdown-menu extended inbox">
+                <div class="notify-arrow notify-arrow-green"></div>
+                <li>
+                  <p class="green">You have 5 new messages</p>
+                </li>
+                <li>
+                  <a href="index">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+                    <span class="subject">
+                      <span class="from">Zac Snider</span>
+                      <span class="time">Just now</span>
+                    </span>
+                    <span class="message">
+                      Hi mate, how is everything?
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-divya.jpg"></span>
+                    <span class="subject">
+                      <span class="from">Divya Manian</span>
+                      <span class="time">40 mins.</span>
+                    </span>
+                    <span class="message">
+                      Hi, I need your help with this.
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-danro.jpg"></span>
+                    <span class="subject">
+                      <span class="from">Dan Rogers</span>
+                      <span class="time">2 hrs.</span>
+                    </span>
+                    <span class="message">
+                      Love your new Dashboard.
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-sherman.jpg"></span>
+                    <span class="subject">
+                      <span class="from">Dj Sherman</span>
+                      <span class="time">4 hrs.</span>
+                    </span>
+                    <span class="message">
+                      Please, answer asap.
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="index">See all messages</a>
+                </li>
+              </ul>
+            </li>
+            <!-- inbox dropdown end -->
+            <!-- phone dropdown end -->
+            <li id="header_inbox_bar1"><a data-toggle="modal" href="#myphone">
+              <i class="fa fa-phone"></i> <span class="badge bg-theme">0</span>
+            </a>
+          </li>
+          <!-- phone dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          <li><a class="logout" href="logout">Logout</a></li>
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+
+    <!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+
+          <p class="centered">
+            <a href="index"><img alt="Logo" src="assets/img/logo.png"
+              class="img-circle" width="80"></a>
+            </p>
+            <!--<h5 class="centered">UserName</h5>-->
+
+            <li class="mt"><a class="active" href="index"> <i
+              class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </a></li>
+
+            <li class="sub-menu"><a href="weather"> <i
+              class="fa fa-desktop"></i> <span>Weather Monitor</span>
+            </a>
+          </li>
+            <li class="sub-menu"><a href="levels"> <i
+              class="fa fa-tasks"></i> <span>Levels</span>
+            </a>
+          </li>
+            <li class="sub-menu"><a href="javascript:;"> <i
+              class=" fa fa-bar-chart-o"></i> <span>Analysis</span>
+            </a>
+            <ul class="sub">
+              <li><a href="morris">GeoAnalysis</a></li>
+              <li><a href="heatmap">Heatmap</a></li>
+              <li><a href="reports">Reports</a></li>
+            </ul>
+            </li>
+            <li class="sub-menu"><a href="javascript:;"> <i
+              class="fa fa-cogs"></i> <span>Settings</span>
+            </a>
+            <ul class="sub">
+              <li><a href="calender">Calender</a></li>
+              <li><a href="todo">Todo List</a></li>
+            </ul></li>
+            
+          <!-- sidebar menu end-->
+        </div>
+      </aside>
+      <!--sidebar end-->
+
+<!-- **********************************************************************************************************************************************************
+MAIN CONTENT
+*********************************************************************************************************************************************************** -->
+<!--main content start-->
+<section id="main-content">
+  <section class="wrapper site-min-height">
+    <div class="row mt">
+      <div class="col-lg-12">
+
+        <! -- 1st ROW OF PANELS -->
+        <div class="row">
+          <!-- TWITTER PANEL -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="g2" class="white-panel pn">
+
+            </div>
+          </div><!-- /col-md-4 -->
+
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <!-- WHITE PANEL - TOP USER -->
+            <div id="g3" class="white-panel pn">
+
+            </div>
+          </div><!-- /col-md-4 -->
+
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <!-- INSTAGRAM PANEL -->
+            <div id="g5" class="white-panel pn">
+
+            </div>
+          </div><!-- /col-md-4 -->
+        </div><! --/END 1ST ROW OF PANELS -->
+
+        <! -- 2ND ROW OF PANELS -->
+        <div class="row">
+          <! -- TODO PANEL -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="chart-container0" class="white-panel pn">
+
+            </div>
+          </div><! --/col-md-4 -->
+
+          <! -- PROFILE 01 PANEL -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div class="white-panel pn">
+              <canvas id="gauge1" width="250" height="250" data-type="canv-gauge"
+              data-title="Wind Speed"
+              data-min-value="0"
+              data-max-value="10"
+              data-major-ticks="0 1 2 3 4 5 6 7 8 9 10"
+              data-minor-ticks="2"
+              data-stroke-ticks="true"
+              data-units="Km/h"
+              data-value-format="3.2"
+              data-glow="true"
+              data-animation-delay="1"
+              data-animation-duration="200"
+              data-animation-fn="bounce"
+              data-colors-needle="#f00 #00f"
+              data-highlights="0 30 #eee, 30 60 #ccc, 60 90 #aaa, 90 220 #eaa"
+              data-onready=""
+              ></canvas>
+            </div><! --/content-panel -->
+          </div><! --/col-md-4 -->
+
+          <! -- PROFILE 02 PANEL -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="chart-container1" class="white-panel pn">
+
+            </div><! --/panel -->
+          </div><!--/ col-md-4 -->
+        </div><! --/END 2ND ROW OF PANELS -->
+
+        <! -- 3RD ROW OF PANELS -->
+        <!-- Product Panel -->
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="chart-container2" class="white-panel pn">
+            </div>
+          </div><! --/col-md-4 -->
+
+          <! -- Spotify Panel -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="chart-container3" class="white-panel pn">
+
+              <p class="followers"><i class="fa fa-user"></i> 576,000 FOLLOWERS</p>
+            </div>
+          </div><! --/col-md-4-->
+
+          <! -- Blog Panel -->
+          <div class="col-lg-4 col-md-4 col-sm-4 mb">
+            <div id="chart-container4" class="white-panel pn">
+
+            </div>
+          </div><!-- /col-md-4-->
+        </div><! -- END 3RD ROW OF PANELS -->
+      </div>
+    </div>
+
+  </section><! --/wrapper -->
+</section><!-- /MAIN CONTENT -->
+
+<!--main content end-->
+<!--footer start-->
+<footer class="site-footer">
+  <div class="text-center">
+    2015 - CmpE 280
+    <a href="blank#" class="go-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+  </div>
+</footer>
+<!--footer end-->
+</section>
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="assets/js/jquery.scrollTo.min.js"></script>
+<script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+
+
+<!--common script for all pages-->
+<script src="assets/js/common-scripts.js"></script>
+
+<!--script for this page-->
+
+<script>
+//custom select box
+
+$(function(){
+  $('select.styled').customSelect();
+});
+
+</script>
+
+
+<script>
+var  g2, g3, g5;
+
+window.onload = function(){
+
+  var g2 = new JustGage({
+    id: "g2",
+    value: getRandomInt(0, 100),
+    min: 0,
+    max: 100,
+    title: "Vehicle Movement",
+    label: "",
+    shadowOpacity: 1,
+    shadowSize: 0,
+    shadowVerticalOffset: 10
+  });
+
+  var g3 = new JustGage({
+    id: "g3",
+    value: getRandomInt(0, 100),
+    min: 0,
+    max: 100,
+    title: "Cabin Temperature",
+    label: "",
+    levelColors: [
+      "#00fff6",
+      "#ff00fc",
+      "#1200ff"
+    ]
+  });
+
+
+  var g5 = new JustGage({
+    id: "g5",
+    value: getRandomInt(0, 100),
+    min: 0,
+    max: 100,
+    title: "Cabin Air Humidity",
+    label: "",
+    startAnimationTime: 2000,
+    startAnimationType: ">",
+    refreshAnimationTime: 1000,
+    refreshAnimationType: "bounce"
+  });
+
+
+
+  setInterval(function() {
+    g2.refresh(getRandomInt(0, 100));
+    g3.refresh(getRandomInt(0, 100));
+    g5.refresh(getRandomInt(0, 100));
+  }, 2500);
+};
+</script>
+
+<!-- This is for wind movement -->
+
+<script>
+
+function getdata(city) {
+
+  $.ajax({
+    type: "POST",
+    url: "/getData",
+    data: {'city': city},
+    success: function(msg) {
+      // alert("Form Submitted: " + msg.status +"coord="+ msg['api_res'].coord);
+
+      var data = JSON.parse(msg.api_res);
+      $('#currentdata').html("wind speeed = "  + data['wind'].speed + "  wind deg = " +  data['wind'].deg);
+
+
+
+      Gauge.Collection.get('gauge1').setValue(data['wind'].speed);
+
+
+    }
+  });
+
+}
+
+</script>
+
+<script type="text/javascript">
+
+$(function () {
+
+  var linearGauge = $("#lineargauge");
+
+  linearGauge.igLinearGauge({
+    height: "300px",
+    width: "60px",
+    orientation: "vertical",
+    value: 85,
+    ranges: [
+      {
+        name: 'bad',
+        startValue: 0,
+        endValue: 33
+      },
+      {
+        name: 'acceptable',
+        startValue: 33,
+        endValue: 70
+      },
+      {
+        name: 'good',
+        startValue: 70,
+        endValue: 100
+      }],
+      transitionDuration: 200,
+    });
+
+    // Orientation
+    $("#orientationButton").click(function () {
+
+
+      var orientation = linearGauge.igLinearGauge("option", "orientation") == "vertical" ? "horizontal" : "vertical";
+      linearGauge.igLinearGauge("option", "orientation", orientation);
+
+      if (orientation == "horizontal") {
+        linearGauge.igLinearGauge("option", "width", "100%");
+        linearGauge.igLinearGauge("option", "height", 60);
+      }
+      else {
+        linearGauge.igLinearGauge("option", "width", 60);
+        linearGauge.igLinearGauge("option", "height", 300);
+      }
+
+      $("#orientationButton").text(orientation == "horizontal" ? "Vertical" : "Horizontal");
+    });
+
+    // Scale Inversion
+    $("#isScaleInvertedCheckBox").click(function () {
+      linearGauge.igLinearGauge("option", "isScaleInverted", $(this).is(":checked"));
+    });
+  });
+  </script>
+
+  <script type="text/javascript">
+  FusionCharts.ready(function(){
+    var fuelWidget = new FusionCharts({
+      type: 'cylinder',
+      dataFormat: 'json',
+      id: 'fuelMeter',
+      renderAt: 'chart-container2',
+      width: '150',
+      height: '450',
+      dataSource: {
+        "chart": {
+          "theme": "fint",
+          "caption": "Amount of blood",
+          "upperLimit": "120",
+          "lowerLimitDisplay": "Empty",
+          "upperLimitDisplay": "Full",
+          "numberSuffix": " ltrs",
+          "showValue": "1",
+          "chartBottomMargin": "25",
+          //Changing the Cylinder fill color
+          "cylFillColor": "#FF0000"
+        },
+        "value": "75"
+      }
+    }).render();
+  });
+
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var cSatScoreChart = new FusionCharts({
+      type: 'angulargauge',
+      renderAt: 'chart-container0',
+      width: '300',
+      height: '250',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "caption": "Oxygen",
+          "lowerLimit": "0",
+          "upperLimit": "100",
+          "showValue": "1",
+          "valueBelowPivot": "1",
+          "showTickMarks": "0",
+          "showTickValues": "0",
+          "gaugeFillMix": "{dark-40},{light-40},{dark-20}",
+          "theme": "fint"
+        },
+        "colorRange": {
+          "color": [
+            {
+              "minValue": "0",
+              "maxValue": "50",
+              "code": "#e44a00"
+            },
+            {
+              "minValue": "50",
+              "maxValue": "75",
+              "code": "#f8bd19"
+            },
+            {
+              "minValue": "75",
+              "maxValue": "100",
+              "code": "#6baa01"
+            }
+          ]
+        },
+        "dials": {
+          "dial": [{
+            "value": getRandomInt(0, 100)
+          }]
+        }
+      }
+    }).render();
+  });
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var cSatScoreChart = new FusionCharts({
+      type: 'angulargauge',
+      renderAt: 'chart-container1',
+      width: '300',
+      height: '250',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "caption": "Compressed Air",
+          "lowerLimit": "0",
+          "upperLimit": "100",
+          "showValue": "1",
+          "valueBelowPivot": "1",
+          "showTickMarks": "0",
+          "showTickValues": "0",
+          "gaugeFillMix": "{dark-40},{light-40},{dark-20}",
+          "theme": "fint"
+        },
+        "colorRange": {
+          "color": [
+            {
+              "minValue": "0",
+              "maxValue": "50",
+              "code": "#e44a00"
+            },
+            {
+              "minValue": "50",
+              "maxValue": "75",
+              "code": "#f8bd19"
+            },
+            {
+              "minValue": "75",
+              "maxValue": "100",
+              "code": "#6baa01"
+            }
+          ]
+        },
+        "dials": {
+          "dial": [{
+            "value": getRandomInt(0, 100)
+          }]
+        }
+      }
+    }).render();
+  });
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var csChart = new FusionCharts({
+      type: 'vled',
+      renderAt: 'chart-container2',
+      id: 'pow-monitor',
+      width: '150',
+      height: '250',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "caption": "HM Power level",
+          "subcaptionFontBold": "0",
+          "lowerLimit": "0",
+          "upperLimit": "100",
+          "lowerLimitDisplay": "Bad",
+          "upperLimitDisplay": "Good",
+          "numberSuffix": "%",
+          "showValue": "0",
+          "showBorder": "0",
+          "showShadow": "0",
+          "tickMarkDistance": "2",
+          "bgcolor":"#ffffff"
+        },
+        "colorRange": {
+          "color": [{
+            "minValue": "0",
+            "maxValue": "45",
+            "code": "#8e0000"
+          }, {
+            "minValue": "45",
+            "maxValue": "75",
+            "code": "#f2c500"
+          }, {
+            "minValue": "75",
+            "maxValue": "100",
+            "code": "#1aaf5d"
+          }]
+        },
+        "value": getRandomInt(0, 100)
+      },
+      "events": {
+        "rendered" : function (evtObj, argObj){
+          var intervalVar = setInterval(function () {
+            var temp = -10 + parseInt( Math.floor(Math.random() * 6), 10);
+            FusionCharts.items["pow-monitor"].feedData("value="+temp);
+          }, 1000);
+        }
+      }
+    })
+    .render();
+  });
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var chart = new FusionCharts({
+      type: 'thermometer',
+      renderAt: 'chart-container3',
+      id: 'temp-monitor',
+      width: '180',
+      height: '250',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "caption": "Cabin Temperature",
+          "subcaptionFontBold": "0",
+          "lowerLimit": "-20",
+          "upperLimit": "20",
+          "numberSuffix": "°C",
+          "bgColor": "#ffffff",
+          "showBorder": "0",
+          "thmFillColor": "#008ee4"
+        },
+        "value": getRandomInt(0, 100)
+      },
+      "events": {
+        "rendered" : function (evtObj, argObj){
+          var intervalVar = setInterval(function () {
+            var temp = -10 + parseInt( Math.floor(Math.random() * 6), 10);
+            FusionCharts.items["temp-monitor"].feedData("value="+temp);
+          }, 2000);
+        }
+      }
+    })
+    .render();
+  });
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var csChart = new FusionCharts({
+      type: 'funnel',
+      renderAt: 'chart-container4',
+      width: '250',
+      height: '250',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "bgcolor": "FFFFFF",
+          "caption": "Medical Liquids",
+          "decimals": "1",
+          "basefontsize": "8",
+          "issliced": "0",
+          "ishollow": "1",
+          "labeldistance": "8",
+          "showBorder": "0"
+        },
+        "data": [
+          {
+            "label": "Saline",
+            "value": "10"
+          },
+          {
+            "label": "Glucose",
+            "value": "8",
+            "color": "008ee4"
+          },
+          {
+            "label": "NitroGlycerine",
+            "value": "6",
+            "color": "f8bd19"
+          },
+          {
+            "label": "Betadine",
+            "value": "4",
+            "color": "6baa01"
+          },
+          {
+            "label": "Distilled Water",
+            "value": "20",
+            "color": "e44a00"
+          }
+        ]
+      }
+    })
+    .render();
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /node_modules/
+Disallow: /routes/
+Disallow: /views/blank.ejs  
+Sitemap: http://socionavigation.mybluemix.net/sitemap.xml

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data of reported accidents and alerts received">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Emergency, Vehicle, Navigation , System, Reports, Messages">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <title>Reports</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="assets/css/simplePagination.css"/>
+    <!-- Custom styles for this template -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style-responsive.css" rel="stylesheet">
+    <link href="vendor/css/main.css" media="screen,projection" type="text/css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+   <script src="https://cdn.localizejs.com/localize.js"></script>
+   <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62496983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+<script>
+  Localize.initialize({
+    key: 'h8lLe6cTYL2eN',
+    rememberLanguage: true,
+    saveNewPhrases: true,
+    translateBody: true
+  });
+Localize.setLanguage('en');
+</script>
+  </head>
+
+  <body>
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myphone" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Phone</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="dialpad compact">
+                      <div class="number"></div>
+                      <div class="dials">
+                          <ol>
+                              <li class="digits"><p><strong>1</strong></p></li>
+                              <li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+                              <li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+                              <li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+                              <li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+                              <li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+                              <li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+                              <li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+                              <li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+                              <li class="digits"><p><strong>*</strong></p></li>
+                              <li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+                              <li class="digits"><p><strong>#</strong></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Clear</sup></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Delete</sup></p></li>
+                              <li class="digits pad-action"><a href="#"><p><strong><i class="fa fa-phone"></i></strong> <sup>Cal
+                                  l</sup></p></a></li>
+                          </ol>
+                      </div>
+                  </div>
+                </div>
+                <div class="modal-footer centered">
+                    <button data-dismiss="modal" class="btn btn-theme04" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+  <section id="container" >
+      <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+      <!--header start-->
+      <header class="header black-bg">
+              <div class="sidebar-toggle-box">
+                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+              </div>
+            <!--logo start-->
+             <a href="index" class="logo"><h1>SocioNavigation</h1></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                            <i class="fa fa-tasks"></i>
+                            <span class="badge bg-theme">4</span>
+                        </a>
+                        <ul class="dropdown-menu extended tasks-bar">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">You have 4 pending tasks</p>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">SocioNavigation Admin Panel</div>
+                                        <div class="percent">40%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Database Update</div>
+                                        <div class="percent">60%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Product Development</div>
+                                        <div class="percent">80%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Payments Sent</div>
+                                        <div class="percent">70%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                                            <span class="sr-only">70% Complete (Important)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="external">
+                                <a href="#">See All Tasks</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- settings end -->
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme">5</span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">You have 5 new messages</p>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Zac Snider</span>
+                                    <span class="time">Just now</span>
+                                    </span>
+                                    <span class="message">
+                                        Hi mate, how is everything?
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-divya.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Divya Manian</span>
+                                    <span class="time">40 mins.</span>
+                                    </span>
+                                    <span class="message">
+                                     Hi, I need your help with this.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-danro.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Dan Rogers</span>
+                                    <span class="time">2 hrs.</span>
+                                    </span>
+                                    <span class="message">
+                                        Love your new Dashboard.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-sherman.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Dj Sherman</span>
+                                    <span class="time">4 hrs.</span>
+                                    </span>
+                                    <span class="message">
+                                        Please, answer asap.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">See all messages</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- inbox dropdown end -->
+                    <!-- phone dropdown end -->
+                		<li id="header_inbox_bar1"><a data-toggle="modal" href="#myphone">
+                			<i class="fa fa-phone"></i> <span class="badge bg-theme">0</span>
+                		</a>
+                		</li>
+                	<!-- phone dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+            	<ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="logout">Logout</a></li>
+            	</ul>
+            </div>
+        </header>
+      <!--header end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN SIDEBAR MENU
+      *********************************************************************************************************************************************************** -->
+      <!--sidebar start-->
+  		<aside>
+  			<div id="sidebar" class="nav-collapse ">
+  				<!-- sidebar menu start-->
+  				<ul class="sidebar-menu" id="nav-accordion">
+
+  					<p class="centered">
+  						<a href="index"><img alt="Logo" src="assets/img/logo.png"
+  							class="img-circle" width="80"></a>
+  						</p>
+  						<!--<h5 class="centered">UserName</h5>-->
+
+  						<li class="mt"><a class="active" href="index"> <i
+  							class="fa fa-dashboard"></i> <span>Dashboard</span>
+  						</a></li>
+
+  						<li class="sub-menu"><a href="weather"> <i
+  							class="fa fa-desktop"></i> <span>Weather Monitor</span>
+  						</a>
+  					</li>
+  						<li class="sub-menu"><a href="levels"> <i
+  							class="fa fa-tasks"></i> <span>Levels</span>
+  						</a>
+  					</li>
+  						<li class="sub-menu"><a href="javascript:;"> <i
+  							class=" fa fa-bar-chart-o"></i> <span>Analysis</span>
+  						</a>
+  						<ul class="sub">
+  							<li><a href="morris">GeoAnalysis</a></li>
+  							<li><a href="heatmap">Heatmap</a></li>
+  							<li><a href="reports">Reports</a></li>
+  						</ul>
+  						</li>
+  						<li class="sub-menu"><a href="javascript:;"> <i
+  							class="fa fa-cogs"></i> <span>Settings</span>
+  						</a>
+  						<ul class="sub">
+  							<li><a href="calender">Calender</a></li>
+  							<li><a href="todo">Todo List</a></li>
+  						</ul></li>
+
+  					<!-- sidebar menu end-->
+  				</div>
+  			</aside>
+        <!--sidebar end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper site-min-height">
+          	<!-- <h3><i class="fa fa-angle-right"></i> Blank Page</h3> -->
+            <div class="row mt">
+                <div class="col-lg-12">
+                    <div class="content-panel">
+                      <section id="unseen">
+                        <table class="table table-bordered table-striped table-condensed">
+                          <h4><i class="fa fa-angle-right"></i>Report Status</h4>
+                          <hr>
+                            <thead>
+                            <tr>
+                              <th><i class="fa fa-bullhorn"></i> Date</th>
+                                <th><i class="fa fa-bullhorn"></i> Name</th>
+                                <th class="hidden-phone"><i class="fa fa-question-circle"></i> Message</th>
+                                <th><i class="fa fa-bookmark"></i> Position</th>
+                                <th><i class=" fa fa-edit"></i> Status</th>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                              <%
+                              for(var i=0;i<item.length;i++){
+                              %>
+                            <tr>
+                                <td><a href="calender"><%=item[i].time%></a></td>
+                                <td><a><%=item[i].sender%></a></td>
+                                <td class="hidden-phone"><%=item[i].msg%></td>
+                                <td>(<%=item[i].lat%>,<%=item[i].long%>)</td>
+                                <td><span class="label label-info label-mini">Accomplished</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
+                                </td>
+                            </tr>
+                            <%}%>
+                        </tbody>
+
+                        </table>
+                      </section>
+                        <div class="pagination-page"></div>
+                    </div><!-- /content-panel -->
+                </div><!-- /col-md-12 -->
+            </div><!-- /row -->
+		</section><! --/wrapper -->
+      </section><!-- /MAIN CONTENT -->
+
+      <!--main content end-->
+      <!--footer start-->
+      <footer class="site-footer">
+          <div class="text-center">
+            2015 - CmpE 280
+              <a href="index" class="go-top">
+                  <i class="fa fa-angle-up"></i><a href="//www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark"  data-pin-color="green" data-pin-height="28"><img alt="Pin" src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_28.png" /></a>
+<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script>
+              </a>
+          </div>
+      </footer>
+      <!--footer end-->
+  </section>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="assets/js/jquery.scrollTo.min.js"></script>
+    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+
+
+    <!--common script for all pages-->
+    <script src="assets/js/common-scripts.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.simplePagination.js"></script>
+    <!--script for this page-->
+    <script>
+
+  	jQuery(function($) {
+      // consider adding an id to your table,
+      // just incase a second table ever enters the picture..?
+      var items = $("table tbody tr");
+
+      var numItems = items.length;
+      var perPage = 5;
+
+      // only show the first 25 (or "first per_page") items initially
+      items.slice(perPage).hide();
+
+      // now setup your pagination
+      // you need that .pagination-page div before/after your table
+      $(".pagination-page").pagination({
+          items: numItems,
+          itemsOnPage: perPage,
+          cssStyle: "light-theme",
+          onPageClick: function(pageNumber) { // this is where the magic happens
+              // someone changed page, lets hide/show trs appropriately
+              var showFrom = perPage * (pageNumber - 1);
+              var showTo = showFrom + perPage;
+
+              items.hide() // first hide everything, then show for the new page
+                   .slice(showFrom, showTo).show();
+          }
+      });
+  });
+
+  	</script>
+
+  <script>
+      //custom select box
+
+      $(function(){
+          $('select.styled').customSelect();
+      });
+
+  </script>
+
+  </body>
+</html>

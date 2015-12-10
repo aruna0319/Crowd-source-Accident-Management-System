@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HeatMap for accidents">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Emergency, Vehicle, Navigation , System, HeatMap">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <title>HeatMap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style-responsive.css" rel="stylesheet">
+    <link href="vendor/css/main.css" media="screen,projection" type="text/css" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Fusion Charts -->
+    <script type="text/javascript" src="fusioncharts/fusioncharts.js"></script>
+    <script type="text/javascript" src="fusioncharts/themes/fusioncharts.theme.fint.js"></script>
+    <script type="text/javascript" src="fusioncharts/guage.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+
+    <script src="resources/js/raphael.2.1.0.min.js"></script>
+    <script src="resources/js/justgage.1.0.1.min.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62496983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    <!-- Fusion -->
+   <script src="https://cdn.localizejs.com/localize.js"></script>
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+<script>
+  Localize.initialize({
+    key: 'h8lLe6cTYL2eN',
+    rememberLanguage: true,
+    saveNewPhrases: true,
+    translateBody: true
+  });
+Localize.setLanguage('en');
+</script>
+  </head>
+
+  <body>
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myphone" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Phone</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="dialpad compact">
+                      <div class="number"></div>
+                      <div class="dials">
+                          <ol>
+                              <li class="digits"><p><strong>1</strong></p></li>
+                              <li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+                              <li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+                              <li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+                              <li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+                              <li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+                              <li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+                              <li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+                              <li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+                              <li class="digits"><p><strong>*</strong></p></li>
+                              <li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+                              <li class="digits"><p><strong>#</strong></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Clear</sup></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Delete</sup></p></li>
+                              <li class="digits pad-action"><a href="#"><p><strong><i class="fa fa-phone"></i></strong> <sup>Cal
+                                  l</sup></p></a></li>
+                          </ol>
+                      </div>
+                  </div>
+                </div>
+                <div class="modal-footer centered">
+                    <button data-dismiss="modal" class="btn btn-theme04" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+  <section id="container" >
+      <!-- **********************************************************************************************************************************************************
+      TOP BAR CONTENT & NOTIFICATIONS
+      *********************************************************************************************************************************************************** -->
+      <!--header start-->
+      <header class="header black-bg">
+              <div class="sidebar-toggle-box">
+                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+              </div>
+            <!--logo start-->
+             <a href="index" class="logo"><h1>SocioNavigation</h1></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                            <i class="fa fa-tasks"></i>
+                            <span class="badge bg-theme">4</span>
+                        </a>
+                        <ul class="dropdown-menu extended tasks-bar">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">You have 4 pending tasks</p>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">SocioNavigation Admin Panel</div>
+                                        <div class="percent">40%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Database Update</div>
+                                        <div class="percent">60%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Product Development</div>
+                                        <div class="percent">80%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <div class="task-info">
+                                        <div class="desc">Payments Sent</div>
+                                        <div class="percent">70%</div>
+                                    </div>
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                                            <span class="sr-only">70% Complete (Important)</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="external">
+                                <a href="#">See All Tasks</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- settings end -->
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme">5</span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">You have 5 new messages</p>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Zac Snider</span>
+                                    <span class="time">Just now</span>
+                                    </span>
+                                    <span class="message">
+                                        Hi mate, how is everything?
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-divya.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Divya Manian</span>
+                                    <span class="time">40 mins.</span>
+                                    </span>
+                                    <span class="message">
+                                     Hi, I need your help with this.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-danro.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Dan Rogers</span>
+                                    <span class="time">2 hrs.</span>
+                                    </span>
+                                    <span class="message">
+                                        Love your new Dashboard.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">
+                                    <span class="photo"><img alt="avatar" src="assets/img/ui-sherman.jpg"></span>
+                                    <span class="subject">
+                                    <span class="from">Dj Sherman</span>
+                                    <span class="time">4 hrs.</span>
+                                    </span>
+                                    <span class="message">
+                                        Please, answer asap.
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="index">See all messages</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- inbox dropdown end -->
+                    <!-- phone dropdown end -->
+                		<li id="header_inbox_bar1"><a data-toggle="modal" href="#myphone">
+                			<i class="fa fa-phone"></i> <span class="badge bg-theme">0</span>
+                		</a>
+                		</li>
+                	<!-- phone dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+            	<ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="logout">Logout</a></li>
+            	</ul>
+            </div>
+        </header>
+      <!--header end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN SIDEBAR MENU
+      *********************************************************************************************************************************************************** -->
+      <!--sidebar start-->
+  		<aside>
+  			<div id="sidebar" class="nav-collapse ">
+  				<!-- sidebar menu start-->
+  				<ul class="sidebar-menu" id="nav-accordion">
+
+  					<p class="centered">
+  						<a href="index"><img alt="Logo" src="assets/img/logo.png"
+  							class="img-circle" width="80"></a>
+  						</p>
+  						<!--<h5 class="centered">UserName</h5>-->
+
+  						<li class="mt"><a class="active" href="index"> <i
+  							class="fa fa-dashboard"></i> <span>Dashboard</span>
+  						</a></li>
+
+  						<li class="sub-menu"><a href="weather"> <i
+  							class="fa fa-desktop"></i> <span>Weather Monitor</span>
+  						</a>
+  					</li>
+  						<li class="sub-menu"><a href="levels"> <i
+  							class="fa fa-tasks"></i> <span>Levels</span>
+  						</a>
+  					</li>
+  						<li class="sub-menu"><a href="javascript:;"> <i
+  							class=" fa fa-bar-chart-o"></i> <span>Analysis</span>
+  						</a>
+  						<ul class="sub">
+  							<li><a href="morris">GeoAnalysis</a></li>
+  							<li><a href="heatmap">Heatmap</a></li>
+  							<li><a href="reports">Reports</a></li>
+  						</ul>
+  						</li>
+  						<li class="sub-menu"><a href="javascript:;"> <i
+  							class="fa fa-cogs"></i> <span>Settings</span>
+  						</a>
+  						<ul class="sub">
+  							<li><a href="calender">Calender</a></li>
+  							<li><a href="todo">Todo List</a></li>
+  						</ul></li>
+  						
+  					<!-- sidebar menu end-->
+  				</div>
+  			</aside>
+        <!--sidebar end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+      <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper site-min-height">
+          	<h3><i class="fa fa-angle-right"></i> Heat Map</h3>
+          	<div class="row mt">
+          		<div id="chart-container" class="col-lg-12">
+
+          		</div>
+          	</div>
+
+		</section><! --/wrapper -->
+      </section><!-- /MAIN CONTENT -->
+
+      <!--main content end-->
+      <!--footer start-->
+      <footer class="site-footer">
+          <div class="text-center">
+            2015 - CmpE 280
+              <a href="index" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>
+      <!--footer end-->
+  </section>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="assets/js/jquery.scrollTo.min.js"></script>
+    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+
+
+    <!--common script for all pages-->
+    <script src="assets/js/common-scripts.js"></script>
+
+    <!--script for this page-->
+
+  <script>
+      //custom select box
+
+      $(function(){
+          $('select.styled').customSelect();
+      });
+
+  </script>
+  <script>
+  FusionCharts.ready(function () {
+    var csChart = new FusionCharts({
+      type: 'heatmap',
+      renderAt: 'chart-container',
+      width: '1000',
+      height: '500',
+      dataFormat: 'json',
+      dataSource: {
+    "chart": {
+        "caption": "Casualities Attended",
+        "bgcolor": "FFFFFF",
+        "canvasborderthickness": "0",
+        "labeldisplay": "WRAP",
+        "plotbordercolor": "FFFFFF",
+        "basefontcolor": "FFFFFF",
+        "outcnvbasefontcolor": "333333",
+        "showvalues": "0",
+        "captionpadding": "5",
+        "legendpadding": "0",
+        "tooltipcolor": "333333",
+        "canvasborderalpha": "0",
+        "legendshadow": "0",
+        "legendborderalpha": "0",
+        "xaxisname": "Days in a month",
+        "showBorder": "0"
+    },
+    "rows": {
+        "row": [
+            {
+                "id": "Mon"
+            },
+            {
+                "id": "Tue"
+            },
+            {
+                "id": "Wed"
+            },
+            {
+                "id": "Thu"
+            },
+            {
+                "id": "Fri"
+            },
+            {
+                "id": "Sat"
+            },
+            {
+                "id": "Sun"
+            }
+        ]
+    },
+    "columns": {
+        "column": [
+            {
+                "id": "1"
+            },
+            {
+                "id": "2"
+            },
+            {
+                "id": "3"
+            },
+            {
+                "id": "4"
+            },
+            {
+                "id": "5"
+            },
+            {
+                "id": "6"
+            },
+            {
+                "id": "7"
+            },
+            {
+                "id": "8"
+            },
+            {
+                "id": "9"
+            },
+            {
+                "id": "10"
+            },
+            {
+                "id": "11"
+            },
+            {
+                "id": "12"
+            },
+            {
+                "id": "13"
+            },
+            {
+                "id": "14"
+            },
+            {
+                "id": "15"
+            },
+            {
+                "id": "16"
+            },
+            {
+                "id": "17"
+            },
+            {
+                "id": "18"
+            },
+            {
+                "id": "19"
+            },
+            {
+                "id": "20"
+            },
+            {
+                "id": "21"
+            },
+            {
+                "id": "22"
+            },
+            {
+                "id": "23"
+            },
+            {
+                "id": "24"
+            },
+            {
+                "id": "25"
+            },
+            {
+                "id": "26"
+            },
+            {
+                "id": "27"
+            },
+            {
+                "id": "28"
+            },
+            {
+                "id": "29"
+            },
+            {
+                "id": "30"
+            },
+            {
+                "id": "31"
+            }
+        ]
+    },
+    "dataset": [
+        {
+            "data": [
+                {
+                    "rowid": "Mon",
+                    "columnid": "0",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "1",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "2",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "3",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "4",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "5",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "6",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "7",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "8",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "9",
+                    "value": "6"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "10",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "11",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "12",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "13",
+                    "value": "23"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "14",
+                    "value": "27"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "15",
+                    "value": "32"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "16",
+                    "value": "46"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "17",
+                    "value": "19"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "18",
+                    "value": "23"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "19",
+                    "value": "25"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "20",
+                    "value": "19"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "21",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "22",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "23",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Mon",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "0",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "1",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "2",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "3",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "4",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "5",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "6",
+                    "value": "1"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "7",
+                    "value": "9"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "8",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "9",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "10",
+                    "value": "23"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "11",
+                    "value": "34"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "12",
+                    "value": "45"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "13",
+                    "value": "68"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "14",
+                    "value": "47"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "15",
+                    "value": "52"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "16",
+                    "value": "26"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "17",
+                    "value": "49"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "18",
+                    "value": "33"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "19",
+                    "value": "28"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "20",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "21",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "22",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "23",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Tue",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "0",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "1",
+                    "value": "6"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "2",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "3",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "4",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "5",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "6",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "7",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "8",
+                    "value": "18"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "9",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "10",
+                    "value": "27"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "11",
+                    "value": "33"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "12",
+                    "value": "37"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "13",
+                    "value": "43"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "14",
+                    "value": "49"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "15",
+                    "value": "54"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "16",
+                    "value": "67"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "17",
+                    "value": "75"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "18",
+                    "value": "87"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "19",
+                    "value": "72"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "20",
+                    "value": "52"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "21",
+                    "value": "23"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "22",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "23",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Wed",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "0",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "1",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "2",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "3",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "4",
+                    "value": "5"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "5",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "6",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "7",
+                    "value": "9"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "8",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "9",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "10",
+                    "value": "15"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "11",
+                    "value": "23"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "12",
+                    "value": "25"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "13",
+                    "value": "28"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "14",
+                    "value": "17"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "15",
+                    "value": "22"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "16",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "17",
+                    "value": "33"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "18",
+                    "value": "35"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "19",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "20",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "21",
+                    "value": "6"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "22",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "23",
+                    "value": "1"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Thu",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "0",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "1",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "2",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "3",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "4",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "5",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "6",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "7",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "8",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "9",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "10",
+                    "value": "18"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "11",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "12",
+                    "value": "25"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "13",
+                    "value": "27"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "14",
+                    "value": "17"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "15",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "16",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "17",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "18",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "19",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "20",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "21",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "22",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "23",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Fri",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "0",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "1",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "2",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "3",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "4",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "5",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "6",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "7",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "8",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "9",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "10",
+                    "value": "18"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "11",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "12",
+                    "value": "25"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "13",
+                    "value": "27"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "14",
+                    "value": "17"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "15",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "16",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "17",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "18",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "19",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "20",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "21",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "22",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "23",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sat",
+                    "columnid": "31",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "0",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "1",
+                    "value": "4"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "2",
+                    "value": "7"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "3",
+                    "value": "11"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "4",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "5",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "6",
+                    "value": "8"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "7",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "8",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "9",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "10",
+                    "value": "18"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "11",
+                    "value": "20"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "12",
+                    "value": "25"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "13",
+                    "value": "27"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "14",
+                    "value": "17"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "15",
+                    "value": "16"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "16",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "17",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "18",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "19",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "20",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "21",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "22",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "23",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "24",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "25",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "26",
+                    "value": "14"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "27",
+                    "value": "12"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "28",
+                    "value": "10"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "29",
+                    "value": "3"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "30",
+                    "value": "2"
+                },
+                {
+                    "rowid": "Sun",
+                    "columnid": "31",
+                    "value": "2"
+                }
+            ]
+        }
+    ],
+    "colorrange": {
+        "gradient": "1",
+        "minvalue": "0",
+        "code": "a4c93f",
+        "startlabel": "",
+        "endlabel": "Very High",
+        "color": [
+            {
+                "minvalue": "0",
+                "maxvalue": "20",
+                "code": "a4c93f",
+                "label": "Average",
+                "alpha": "40"
+            },
+            {
+                "code": "e44a00",
+                "minvalue": "20",
+                "maxvalue": "100",
+                "alpha": "40"
+            }
+        ]
+    }
+}
+    })
+    .render();
+  });
+  </script>
+  </body>
+</html>

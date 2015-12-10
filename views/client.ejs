@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Application Client from which users report accidents">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Emergency, Vehicle, Navigation , System, Application, Client">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <title>Application Client</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62496983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    <script>
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+      document.getElementById("posi").value = position.coords.latitude + "," + position.coords.longitude;
+}
+getLocation();
+</script>
+  </head>
+
+  <body>
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myphone" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Phone</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="dialpad compact">
+                      <div class="number"></div>
+                      <div class="dials">
+                          <ol>
+                              <li class="digits"><p><strong>1</strong></p></li>
+                              <li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+                              <li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+                              <li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+                              <li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+                              <li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+                              <li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+                              <li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+                              <li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+                              <li class="digits"><p><strong>*</strong></p></li>
+                              <li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+                              <li class="digits"><p><strong>#</strong></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Clear</sup></p></li>
+                              <li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Delete</sup></p></li>
+                              <li class="digits pad-action"><a href="#"><p><strong><i class="fa fa-phone"></i></strong> <sup>Cal
+                                  l</sup></p></a></li>
+                          </ol>
+                      </div>
+                  </div>
+                </div>
+                <div class="modal-footer centered">
+                    <button data-dismiss="modal" class="btn btn-theme04" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+
+	  <div id="login-page">
+	  	<div class="container">
+
+		      <form class="form-login"  method="post" action="/send">
+		        <h2 class="form-login-heading">Report Now</h2>
+		        <div class="login-wrap">
+		            <input type="text" id="name" name="name" class="form-control" placeholder="User Name" autofocus>
+		            <br>
+                <textarea rows="4" id="msg" name="msg" class="form-control" placeholder="Message"></textarea>
+                <input id="posi"  name="posi" type="hidden" class="register-input" placeholder="coords">
+              </br>
+		            <button class="btn btn-theme btn-block" href="/client" type="submit"><i class="fa fa-lock"></i> ALERT</button>
+		            <hr>
+
+		        </div>
+
+		      </form>
+
+	  	</div>
+	  </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!--BACKSTRETCH-->
+    <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+    <script type="text/javascript" src="assets/js/jquery.backstretch.min.js"></script>
+    <script>
+        $.backstretch("assets/img/login-bg.jpg", {speed: 700});
+    </script>
+
+
+  </body>
+</html>

@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dashboard for Emergency Navigation System during Accidents">
+<meta name="author" content="Dashboard">
+<meta name="keyword" content="Emergency, Vehicle, Navigation , System">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<title>Socio Navigation</title>
+
+<!-- Bootstrap core CSS -->
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!--external css-->
+<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"
+	href="assets/css/zabuto_calendar.css">
+<link rel="stylesheet" type="text/css"
+	href="assets/js/gritter/css/jquery.gritter.css" />
+<link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
+<link href="vendor/css/main.css" media="screen,projection" type="text/css" rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/style-responsive.css" rel="stylesheet">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62496983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script src="assets/js/chart-master/Chart.js"></script>
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false">
+
+</script>
+<script src="//js.pusher.com/2.2/pusher.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<!--   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script> -->
+
+<!-- Ajax data -->
+<script>
+      var feedback;
+	 	 function getfeeds(){
+
+	       feedback = $.ajax({
+	          type: "POST",
+	          url: 'readData',
+	          dataType: 'json',
+			  cache:false,
+	          context: document.getElementById('dashboards'),
+	          success: function(feedback) {
+	          setTimeout(function(){getfeeds();}, 30000);
+	          $("#1").text(feedback[0].time);
+	          $("#2").text(feedback[0].name);
+	          $("#3").text(feedback[0].msg);
+	          $("#4").text(feedback[1].time);
+	          $("#5").text(feedback[1].name);
+	          $("#6").text(feedback[1].msg);
+	          $("#7").text(feedback[2].time);
+	          $("#8").text(feedback[2].name);
+	          $("#9").text(feedback[2].msg);
+	          $("#10").text(feedback[3].time);
+	          $("#11").text(feedback[3].name);
+	          $("#12").text(feedback[3].msg);
+	          $("#13").text(feedback[4].time);
+	          $("#14").text(feedback[4].name);
+	          $("#15").text(feedback[4].msg);
+
+	          //alert(feedback[1].idfeeds);
+	            //console.log(data);
+	        }
+			});
+			}
+			getfeeds();
+      </script>
+
+
+
+<script>
+	var directionsDisplay;
+	var directionsService = new google.maps.DirectionsService();
+	var trafficLayer = new google.maps.TrafficLayer();
+	var map;
+	var accPos;
+	var time;
+	var dist;
+	function initialize() {
+
+		directionsDisplay = new google.maps.DirectionsRenderer();
+		var mapOptions = {
+			zoom : 15,
+			panControl : true,
+			zoomControl : true,
+			mapTypeControl : true,
+			scaleControl : true,
+			streetViewControl : true,
+			overviewMapControl : true,
+		//	mapTypeId:google.maps.MapTypeId.HYBRID
+		};
+		map = new google.maps.Map(document.getElementById('map-canvas'),
+				mapOptions);
+
+		navigator.geolocation.getCurrentPosition(function(position) {
+			geolocate = new google.maps.LatLng(position.coords.latitude,
+					position.coords.longitude);
+			map.setCenter(geolocate);
+			var image="assets/img/current.png"
+			var marker = new google.maps.Marker({
+				position : geolocate,
+				icon:image,
+			animation:google.maps.Animation.BOUNCE
+			});
+			marker.setMap(map);
+		});
+		trafficLayer.setMap(map);
+
+		 setMarkers(map, hospitals);
+			/*   var cloudLayer = new google.maps.weather.CloudLayer();
+			  cloudLayer.setMap(map);
+			} */
+
+
+	// 	Function to add listner Event on mouse click
+		google.maps.event.addListener(map, 'click', function(event) {
+			placeMarkerClick(event.latLng);
+
+		});
+
+		var image = 'assets/img/acc.png';
+
+	// Function to place marker on click
+		function placeMarkerClick(location){
+			accPos=location;
+		var marker=new google.maps.Marker({
+				position:accPos,
+				map:map,
+				icon:image
+			});
+			calcRouteClick();
+
+		}
+
+		function placeMarker(location) {
+			//accPos = location;
+			loc=location.split(":");
+			 acc = new google.maps.LatLng(loc[0], loc[1]);
+			var marker = new google.maps.Marker({
+				position : acc,/*  location, */ /* "("+loc[0]+","+" "+loc[1]+")", */
+				map : map,
+				icon : image
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+			calcRoute();
+  });
+			
+		}
+		Pusher.log = function(message) {
+			if (window.console && window.console.log) {
+				window.console.log(message);
+			}
+		};
+
+		var pusher = new Pusher('379bfc578ad712a7784e');
+		var channel = pusher.subscribe('test_channel');
+		channel.bind('my_event', function(data) {
+			placeMarker(data.message);
+
+		});
+
+		directionsDisplay.setMap(map);
+
+		// Directions with route
+		 directionsDisplay.setPanel(document.getElementById('directions-panel'));
+		  var control = document.getElementById('control');
+		  control.style.display = 'block';
+		  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+
+	}
+	// Function to calculate distance to destination (LatLng)
+	
+
+	// Calculating distance based on click of location
+	function calcRouteClick() {
+		var request = {
+			origin : geolocate,
+			destination : accPos,
+			travelMode : google.maps.TravelMode.DRIVING
+		};
+		directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				directionsDisplay.setDirections(response);
+				var route = response.routes[0];
+			}
+			calculateDistances();
+		});
+	}
+
+// Calculating distance based on Latitude and Longitude
+	function calcRoute() {
+		var request = {
+			origin : geolocate,
+			destination : acc,
+			travelMode : google.maps.TravelMode.DRIVING
+		};
+		directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				directionsDisplay.setDirections(response);
+				var route = response.routes[0];
+			}
+			calculateDistances2();
+		});
+	}
+
+function calculateDistances() {
+		  var service = new google.maps.DistanceMatrixService();
+		  service.getDistanceMatrix(
+		    {
+		      origins: [geolocate],
+		      destinations: [accPos],
+		      travelMode: google.maps.TravelMode.DRIVING,
+		      unitSystem: google.maps.UnitSystem.IMPERIAL,
+		      avoidHighways: false,
+		      avoidTolls: false
+		    }, callback);
+		}
+		function callback(response, status) {
+		
+		  if (status != google.maps.DistanceMatrixStatus.OK) {
+		    alert('Error was: ' + status);
+		  } else {
+		 
+		    var origins = response.originAddresses;
+		    var destinations = response.destinationAddresses;
+		    for (var i = 0; i < origins.length; i++) {
+		      var results = response.rows[i].elements;
+		      for (var j = 0; j < results.length; j++) {
+		    	alert("hello");
+		        alert(results[j].distance.text+" in "+results[j].duration.text);
+		    	 
+		      }
+
+		    }
+		  }
+		}
+
+function calculateDistances2() {
+		  var service = new google.maps.DistanceMatrixService();
+		  service.getDistanceMatrix(
+		    {
+		      origins: [geolocate],
+		      destinations: [acc],
+		      travelMode: google.maps.TravelMode.DRIVING,
+		      unitSystem: google.maps.UnitSystem.IMPERIAL,
+		      avoidHighways: false,
+		      avoidTolls: false
+		    }, callback);
+		}
+		function callback(response, status) {
+		
+		  if (status != google.maps.DistanceMatrixStatus.OK) {
+		    alert('Error was: ' + status);
+		  } else {
+		 
+		    var origins = response.originAddresses;
+		    var destinations = response.destinationAddresses;
+		    for (var i = 0; i < origins.length; i++) {
+		      var results = response.rows[i].elements;
+		      for (var j = 0; j < results.length; j++) {
+		    	
+		        alert(results[j].distance.text+" in "+results[j].duration.text);
+		    	 
+		      }
+
+		    }
+		  }
+		}
+
+	
+	function showHospital()
+	{
+		var script = document.createElement('script');
+	  	script.setAttribute('src', 'https://storage.googleapis.com/maps-devrel/quakes.geo.json');
+	  	document.getElementsByTagName('head')[0].appendChild(script);
+	}
+
+	function eqfeed_callback(data)
+	{
+		map.data.addGeoJson(data);
+		directionsDisplay.setMap(map);
+	}
+	// Function to calculate distance to destination (Dest Name)
+	function calculateDistance() {
+		  var service = new google.maps.DistanceMatrixService();
+		  service.getDistanceMatrix(
+		    {
+		      origins: [geolocate],
+		      destinations: [document.getElementById('dest').value],
+		      travelMode: google.maps.TravelMode.DRIVING,
+		      unitSystem: google.maps.UnitSystem.IMPERIAL,
+		      avoidHighways: false,
+		      avoidTolls: false
+		    }, callback);
+		}
+		function callback(response, status) {
+		  if (status != google.maps.DistanceMatrixStatus.OK) {
+		    alert('Error was: ' + status);
+		  } else {
+		  
+		    var origins = response.originAddresses;
+		    var destinations = response.destinationAddresses;
+		    for (var i = 0; i < origins.length; i++) {
+		      var results = response.rows[i].elements;
+		      for (var j = 0; j < results.length; j++) {
+		   time=results[j].duration.text;
+		   dist=results[j].distance.text;
+		   document.getElementById("miles").innerHTML=dist;
+		   document.getElementById("time").innerHTML=time;
+		    	  
+		         var infowindow = new google.maps.InfoWindow({
+	    		    content: 'Distance: ' + results[j].distance.text + '<br>Time: ' + results[j].duration.text
+	    		  });
+		        infowindow.setPosition(geolocate);
+		        infowindow.open(map);
+		        
+		        //alert("hello");
+		      }
+		    }
+		  }
+		}
+
+
+	// Calculating distance based on Dest entered
+	function calcRouteDest() {
+		var request = {
+			origin : geolocate,
+		    destination: document.getElementById('dest').value,
+			travelMode : google.maps.TravelMode.DRIVING
+		};
+		directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				directionsDisplay.setDirections(response);
+				var route = response.routes[0];
+			}
+			calculateDistance();
+		});
+	}
+	var hospitals = [
+['OConnor Hospital', 37.3690, -121.8800, 4],
+['Good Samaritan Hospital', 37.3279, -121.9385, 5],
+['Regional Medical Center of San Jose', 37.329675, -121.862283, 3],
+['Santa Clara Valley Medical Center', 37.341526, -121.881509, 2],
+['San Jose Hosp', 37.343863, -121.869535, 1]
+];
+
+	             function setMarkers(map, locations) {
+	               // Add markers to the map
+
+	               // Marker sizes are expressed as a Size of X,Y
+	               // where the origin of the image (0,0) is located
+	               // in the top left of the image.
+				var hosp = 'assets/img/hosp.png';
+	               // Origins, anchor positions and coordinates of the marker
+	               // increase in the X direction to the right and in
+	               // the Y direction down.
+	               var image = {
+	                 url: 'acc.png',
+	                 // This marker is 20 pixels wide by 32 pixels tall.
+	                 size: new google.maps.Size(20, 32),
+	                 // The origin for this image is 0,0.
+	                 origin: new google.maps.Point(0,0),
+	                 // The anchor for this image is the base of the flagpole at 0,32.
+	                 anchor: new google.maps.Point(0, 32)
+	               };
+	               // Shapes define the clickable region of the icon.
+	               // The type defines an HTML &lt;area&gt; element 'poly' which
+	               // traces out a polygon as a series of X,Y points. The final
+	               // coordinate closes the poly by connecting to the first
+	               // coordinate.
+	               var shape = {
+	                   coords: [1, 1, 1, 20, 18, 20, 18 , 1],
+	                   type: 'poly'
+	               };
+	               for (var i = 0; i < locations.length; i++) {
+	                 var beach = locations[i];
+	                 var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+	                 var marker = new google.maps.Marker({
+	                     position: myLatLng,
+	                     map: map,
+	                     icon: hosp
+	                    // shape: shape,
+	                   //  title: beach[0],
+	                   //  zIndex: beach[3]
+	                 });
+	               }
+	             }
+
+
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<script src="https://cdn.localizejs.com/localize.js"></script>
+<script>!function(a){if(!a.Localize){a.Localize={};for(var e=["translate","untranslate","phrase","initialize","translatePage","setLanguage","getLanguage","detectLanguage","untranslatePage","bootstrap","prefetch","on","off"],t=0;t<e.length;t++)a.Localize[e[t]]=function(){}}}(window);</script>
+
+<script>
+  Localize.initialize({
+    key: 'h8lLe6cTYL2eN',
+    rememberLanguage: true,
+    saveNewPhrases: true,
+    translateBody: true
+  });
+Localize.setLanguage('en');
+</script>
+</head>
+<body>
+
+	<!-- Modal -->
+	<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myphone" class="modal fade">
+			<div class="modal-dialog">
+					<div class="modal-content">
+							<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title">Phone</h4>
+							</div>
+							<div class="modal-body">
+								<div class="dialpad compact">
+										<div class="number"></div>
+										<div class="dials">
+												<ol>
+														<li class="digits"><p><strong>1</strong></p></li>
+														<li class="digits"><p><strong>2</strong><sup>abc</sup></p></li>
+														<li class="digits"><p><strong>3</strong><sup>def</sup></p></li>
+														<li class="digits"><p><strong>4</strong><sup>ghi</sup></p></li>
+														<li class="digits"><p><strong>5</strong><sup>jkl</sup></p></li>
+														<li class="digits"><p><strong>6</strong><sup>mno</sup></p></li>
+														<li class="digits"><p><strong>7</strong><sup>pqrs</sup></p></li>
+														<li class="digits"><p><strong>8</strong><sup>tuv</sup></p></li>
+														<li class="digits"><p><strong>9</strong><sup>wxyz</sup></p></li>
+														<li class="digits"><p><strong>*</strong></p></li>
+														<li class="digits"><p><strong>0</strong><sup>+</sup></p></li>
+														<li class="digits"><p><strong>#</strong></p></li>
+														<li class="digits"><p><strong><i class="fa fa-refresh"></i></strong><sup>Clear</sup></p></li>
+														<li class="digits"><p><strong><i class="fa fa-times"></i></strong><sup>Delete</sup></p></li>
+														<li class="digits pad-action"><a href="#"><p><strong><i class="fa fa-phone"></i></strong> <sup>Cal
+																l</sup></p></a></li>
+												</ol>
+										</div>
+								</div>
+							</div>
+							<div class="modal-footer centered">
+									<button data-dismiss="modal" class="btn btn-theme04" type="button">Close</button>
+							</div>
+					</div>
+			</div>
+	</div>
+
+	<!-- modal -->
+
+      <section id="container">
+        <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+        <!--header start-->
+        <header class="header black-bg">
+          <div id="tog" class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right"
+            data-original-title="Toggle Navigation"></div>
+          </div>
+          <!--logo start-->
+          <a href="index" class="logo"><h1>SocioNavigation</h1></a>
+          <!--logo end-->
+          <div class="nav notify-row" id="top_menu">
+            <!--  notification start -->
+            <ul class="nav top-menu">
+              <!-- settings start -->
+              <li class="dropdown"><a data-toggle="dropdown"
+                class="dropdown-toggle" href="index#"> <i
+                class="fa fa-tasks"></i> <span class="badge bg-theme">4</span>
+              </a>
+              <ul class="dropdown-menu extended tasks-bar">
+                <div class="notify-arrow notify-arrow-green"></div>
+                <li>
+                  <p class="green">You have 4 pending tasks</p>
+                </li>
+                <li><a href="index#">
+                  <div class="task-info">
+                    <div class="desc">AccidentNavigation</div>
+                    <div class="percent">40%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success"
+                    role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                    aria-valuemax="100" style="width: 40%">
+                    <span class="sr-only">40% Complete (success)</span>
+                  </div>
+                </div>
+              </a></li>
+              <li><a href="index#">
+                <div class="task-info">
+                  <div class="desc">Database Update</div>
+                  <div class="percent">60%</div>
+                </div>
+                <div class="progress progress-striped">
+                  <div class="progress-bar progress-bar-warning"
+                  role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                  aria-valuemax="100" style="width: 60%">
+                  <span class="sr-only">60% Complete (warning)</span>
+                </div>
+              </div>
+            </a></li>
+            <li><a href="index#">
+              <div class="task-info">
+                <div class="desc">Product Development</div>
+                <div class="percent">80%</div>
+              </div>
+              <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-info" role="progressbar"
+                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                style="width: 80%">
+                <span class="sr-only">80% Complete</span>
+              </div>
+            </div>
+          </a></li>
+          <li><a href="index#">
+            <div class="task-info">
+              <div class="desc">Payments Sent</div>
+              <div class="percent">70%</div>
+            </div>
+            <div class="progress progress-striped">
+              <div class="progress-bar progress-bar-danger"
+              role="progressbar" aria-valuenow="70" aria-valuemin="0"
+              aria-valuemax="100" style="width: 70%">
+              <span class="sr-only">70% Complete (Important)</span>
+            </div>
+          </div>
+        </a></li>
+        <li class="external"><a href="#">See All Tasks</a></li>
+      </ul></li>
+      <!-- settings end -->
+      <!-- inbox dropdown start-->
+      <li id="header_inbox_bar" class="dropdown"><a
+        data-toggle="dropdown" class="dropdown-toggle" href="index#">
+        <i class="fa fa-envelope-o"></i> <span class="badge bg-theme">5</span>
+      </a>
+      <ul class="dropdown-menu extended inbox">
+        <div class="notify-arrow notify-arrow-green"></div>
+        <li>
+          <p class="green">You have 5 new messages</p>
+        </li>
+        <li><a href="index#"> <span class="photo"><img
+          alt="avatar" src="assets/img/ui-zac.jpg"></span> <span
+          class="subject"> <span class="from">Zac Snider</span> <span
+          class="time">Just now</span>
+        </span> <span class="message"> Hi mate, how is everything? </span>
+      </a></li>
+      <li><a href="index#"> <span class="photo"><img
+        alt="avatar" src="assets/img/ui-divya.jpg"></span> <span
+        class="subject"> <span class="from">Divya Manian</span>
+        <span class="time">40 mins.</span>
+      </span> <span class="message"> Hi, I need your help with this. </span>
+    </a></li>
+    <li><a href="index#"> <span class="photo"><img
+      alt="avatar" src="assets/img/ui-danro.jpg"></span> <span
+      class="subject"> <span class="from">Dan Rogers</span> <span
+      class="time">2 hrs.</span>
+    </span> <span class="message"> Love your new Dashboard. </span>
+    </a></li>
+    <li><a href="index#"> <span class="photo"><img
+      alt="avatar" src="assets/img/ui-sherman.jpg"></span> <span
+      class="subject"> <span class="from">Dj Sherman</span> <span
+      class="time">4 hrs.</span>
+    </span> <span class="message"> Please, answer asap. </span>
+    </a></li>
+    <li><a href="index#">See all messages</a></li>
+    </ul></li>
+    <!-- phone dropdown end -->
+		<li id="header_inbox_bar1"><a data-toggle="modal" href="#myphone">
+			<i class="fa fa-phone"></i> <span class="badge bg-theme">0</span>
+		</a>
+		</li>
+	<!-- phone dropdown end -->
+    <!--  notification end -->
+    </div>
+    <div class="top-menu">
+      <ul class="nav pull-right top-menu">
+        <li><a class="logout" href="logout">Logout</a></li>
+      </ul>
+    </div>
+    </header>
+    <!--header end-->
+
+    <!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+		<aside>
+			<div id="sidebar" class="nav-collapse ">
+				<!-- sidebar menu start-->
+				<ul class="sidebar-menu" id="nav-accordion">
+
+					<p class="centered">
+						<a href="index"><img alt="Logo" src="assets/img/logo.png"
+							class="img-circle" width="80"></a>
+						</p>
+						<!--<h5 class="centered">UserName</h5>-->
+
+						<li class="mt"><a class="active" href="index"> <i
+							class="fa fa-dashboard"></i> <span>Dashboard</span>
+						</a></li>
+
+						<li class="sub-menu"><a href="weather"> <i
+							class="fa fa-desktop"></i> <span>Weather Monitor</span>
+						</a>
+					</li>
+						<li class="sub-menu"><a href="levels"> <i
+							class="fa fa-tasks"></i> <span>Levels</span>
+						</a>
+					</li>
+						<li class="sub-menu"><a href="javascript:;"> <i
+							class=" fa fa-bar-chart-o"></i> <span>Analysis</span>
+						</a>
+						<ul class="sub">
+							<li><a href="morris">GeoAnalysis</a></li>
+							<li><a href="heatmap">Heatmap</a></li>
+							<li><a href="reports">Reports</a></li>
+						</ul>
+						</li>
+						<li class="sub-menu"><a href="javascript:;"> <i
+							class="fa fa-cogs"></i> <span>Settings</span>
+						</a>
+						<ul class="sub">
+							<li><a href="calender">Calender</a></li>
+							<li><a href="todo">Todo List</a></li>
+						</ul></li>
+						
+					<!-- sidebar menu end-->
+				</div>
+			</aside>
+      <!--sidebar end-->
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+         <!--main content start-->
+          <section id="main-content">
+              <section class="wrapper">
+
+                  <div class="row">
+                      <div class="col-lg-9 main-chart">
+
+                        <div class="row mtbox">
+                            <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
+                                <div class="box1">
+
+                                    <span class="fa fa-clock-o fa-5x"></span>
+                                    <p>Time to Destination</p>
+                                    <h5 id="time"></h5>
+                                </div>
+                                    <p></p>
+                            </div>
+                            <div class="col-md-2 col-sm-2 box0">
+                                <div class="box1">
+                                    <canvas id="serverstatus00" height="60" width="60"></canvas>
+                  <p>Gas Required</p>
+                         <script>
+									var data = [
+												{
+													value: 50,
+													color: "#FFF"
+												},
+												{
+													value: 100,
+													color: "#009688"
+												}
+											];
+				var myPieChart = new Chart(document.getElementById("serverstatus00").getContext("2d")).Pie(data);
+						</script>
+                                    <h3 id="gas"></h3>
+                                </div>
+                                    <p></p>
+                            </div>
+                            <div class="col-md-2 col-sm-2 box0">
+                                <div class="box1">
+                                    <span class="fa fa-ambulance fa-5x"></span>
+                                    <p>Vessel Movement</p>
+                                    <h5>0+</h5>
+                                </div>
+                                    <p></p>
+                            </div>
+                            <div class="col-md-2 col-sm-2 box0">
+                                <div class="box1">
+                                    <span class="fa fa-signal fa-5x"></span>
+                                    <p>Signal</p>
+                                    <h5>Strong</h5>
+                                </div>
+                                    <p></p>
+                            </div>
+                            <div class="col-md-2 col-sm-2 box0">
+                                <div class="box1">
+                                    <!--<span class="li_data"></span>-->
+                  <canvas id="serverstatus01" height="60" width="60"></canvas>
+                  <p>Distance Left</p>
+                         <script>
+									var doughnutData = [
+											{
+												value: 70,
+												color:"#009688"
+											},
+											{
+												value : 0,
+												color : "#fdfdfd"
+											}
+										];
+				var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
+						</script>
+                                    <h3 id="miles"></h3> <!-- results[j].distance.text -->
+                                </div>
+
+                            </div>
+
+                        </div><!-- /row mt -->
+                      <div class="col-sm-4">.col-sm-4</div>
+    					<div class="col-sm-4"><input type="text" id="dest" class="form-control round-form" placeholder="Destination"></div>
+    					<div class="col-sm-4"><button type="button" class="btn btn-round btn-success" onclick="calcRouteDest();">route</button></div>
+
+                          <div class="row mt">
+
+                           <div id="mainmap" class="col-lg-4 col-md-4 col-sm-4 mb"
+                              style="padding: 16px; width: 100%; height: 100%; box-sizing: content-box; position: relative; margin-bottom: 0; margin-left: auto; margin-right: auto; margin-top: auto; -webkit-box-sizing: content-box; -moz-box-sizing: content-box;">
+                              <!-- WHITE PANEL - TOP USER -->
+  						   <div id="map-canvas" class="white-panel pn" style="margin: 0 auto; height: 400px; position: relative; padding-top: 10px; padding-right: 10px; padding-left: 10px; padding-bottom: 10px; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;"></div>
+                           <div class="showback" id="directions-panel"></div>
+                          </div>
+
+                        </div><!-- /row -->
+
+
+                        <div class="row">
+                            <!-- TWITTER PANEL --><!-- /col-md-4 --><!-- /col-md-4 --><!-- /col-md-4 -->
+						<!-- <a onclick="Localize.setLanguage('en')">Translate to Chinese</a> -->
+                        </div><!-- /row -->
+
+                        <div class="row mt">
+                          <!--CUSTOM CHART START -->
+                          <div class="border-head"></div>
+                          <!--custom chart end-->
+                        </div><!-- /row -->
+
+                      </div><!-- /col-lg-9 END SECTION MIDDLE -->
+
+
+          <!-- **********************************************************************************************************************************************************
+          RIGHT SIDEBAR CONTENT
+          *********************************************************************************************************************************************************** -->
+
+                      <div class="col-lg-3 ds">
+                        <!--COMPLETED ACTIONS DONUTS CHART-->
+                           <h3>NOTIFICATIONS</h3>
+
+                            <!-- First Action -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<p><muted id="1"></muted><br/>
+                      		   <a href="#" id="2"></a> <p id="3"><p><br/>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Second Action -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<p><muted id="4"></muted><br/>
+                      		   <a href="#" id="5"></a><p id="6"></p><br/>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Third Action -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<p><muted id="7"></muted><br/>
+                      		   <a href="#" id="8"></a><p id="9"></p><br/>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Fourth Action -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<p><muted id="10"></muted><br/>
+                      		   <a href="#" id="11"></a><p id="12"></p><br/>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Fifth Action -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<p><muted id="13"></muted><br/>
+                      		   <a href="#" id="14"></a><p id="15"></p><br/>
+                      		</p>
+                      	</div>
+                      </div>
+		
+                           <!-- USERS ONLINE SECTION -->
+                            <h3>TEAM MEMBERS</h3>
+                          <!-- First Member -->
+                          <div class="desc">
+                            <div class="thumb">
+                                <img class="img-circle" alt="divya" src="assets/img/ui-divya.jpg" width="35px" height="35px" align="">
+                            </div>
+                            <div class="details">
+                                <p><a href="#">Akshay Chandra</a><br/>
+
+                                </p>
+                            </div>
+                          </div>
+                          <!-- Second Member -->
+                          <div class="desc">
+                            <div class="thumb">
+                                <img class="img-circle" alt="sher" src="assets/img/ui-sherman.jpg" width="35px" height="35px" align="">
+                            </div>
+                            <div class="details">
+                                <p><a href="#">Aruna Motigi</a><br/>
+                                </p>
+                            </div>
+                          </div>
+                          <!-- Third Member -->
+                          <div class="desc">
+                            <div class="thumb">
+                                <img class="img-circle" alt="danro" src="assets/img/ui-danro.jpg" width="35px" height="35px" align="">
+                            </div>
+                            <div class="details">
+                                <p><a href="#">Dhawal Savla</a><br/>
+                                </p>
+                            </div>
+                          </div>
+                          <!-- Fourth Member -->
+                          <div class="desc">
+                            <div class="thumb">
+                                <img class="img-circle" alt="zac" src="assets/img/ui-zac.jpg" width="35px" height="35px" align="">
+                            </div>
+                            <div class="details">
+                                <p><a href="#">Nithya CheReddy</a><br/>
+                                </p>
+                            </div>
+                          </div>
+                          <!-- Fifth Member -->
+                          <div class="desc">
+                            <div class="thumb">
+                                <img class="img-circle" alt="sam" src="assets/img/ui-sam.jpg" width="35px" height="35px" align="">
+                            </div>
+                            <div class="details">
+                                <p><a href="#">Vikram Sai</a><br/>
+                                </p>
+                            </div>
+                          </div>
+
+
+                            <!-- CALENDAR-->
+                            <div id="calendar" class="mb">
+                                <div class="panel green-panel no-margin">
+                                    <div class="panel-body">
+                                        <div id="date-popover" class="popover top" style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
+                                            <div class="arrow"></div>
+                                            <h3 class="popover-title" style="disadding: none;"></h3>
+                                            <div id="date-popover-content" class="popover-content"></div>
+                                        </div>
+                                        <div id="my-calendar"></div>
+                                    </div>
+                                </div>
+                            </div><!-- / calendar -->
+
+                      </div><!-- /col-lg-3 -->
+                  </div><! --/row -->
+              </section>
+          </section>
+    <div style="clear:both;"></div>
+          <!--main content end-->
+          <!--footer start-->
+    <footer class="site-footer">
+      <div class="text-center">
+        2015 - CmpE 280 <a href="index#" class="go-top"> <i
+          class="fa fa-angle-up"><a href="//www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark"  data-pin-color="green" data-pin-height="28"><img alt="Pin" src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_28.png" /></a>
+<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script></i>
+        </a>
+      </div>
+    </footer>
+    <!--footer end-->
+    </section>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript"
+    src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="assets/js/jquery.scrollTo.min.js"></script>
+    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="assets/js/jquery.sparkline.js"></script>
+
+
+    <!--common script for all pages-->
+    <script src="assets/js/common-scripts.js"></script>
+
+    <script type="text/javascript"
+    src="assets/js/gritter/js/jquery.gritter.js"></script>
+    <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
+
+    <!--script for this page-->
+    <script src="assets/js/sparkline-chart.js"></script>
+    <script src="assets/js/zabuto_calendar.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+      var unique_id = $.gritter.add({
+        // (string | mandatory) the heading of the notification
+        title : 'Navigation Console!',
+        // (string | mandatory) the text inside the notification
+        text : 'Welcome to Emergency Vehicle Navigation System.',
+        // (string | optional) the image to display on the left
+        image : 'assets/img/ui-sam.jpg',
+        alt : 'sss',
+        // (bool | optional) if you want it to fade out on its own or just sit there
+        sticky : true,
+        // (int | optional) the time you want it to be alive for before fading out
+        time : '',
+        // (string | optional) the class name you want to apply to that specific message
+        class_name : 'my-sticky-class'
+      });
+
+      return false;
+    });
+    </script>
+
+    <script type="application/javascript">
+
+    $(document).ready(function () {
+      $("#date-popover").popover({html: true, trigger: "manual"});
+      $("#date-popover").hide();
+      $("#date-popover").click(function (e) {
+        $(this).hide();
+      });
+
+      $("#my-calendar").zabuto_calendar({
+        action: function () {
+          return myDateFunction(this.id, false);
+        },
+        action_nav: function () {
+          return myNavFunction(this.id);
+        },
+        ajax: {
+          url: "show_data.php?action=1",
+          modal: true
+        },
+        legend: [
+          {type: "text", label: "Special event", badge: "00"},
+          {type: "block", label: "Regular event", }
+        ]
+      });
+    });
+
+
+    function myNavFunction(id) {
+      $("#date-popover").hide();
+      var nav = $("#" + id).data("navigation");
+      var to = $("#" + id).data("to");
+      console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+    }
+
+    </script>
+
+<script>
+/* function startTimer(duration, display) {
+
+	var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+} */
+
+/* window.onload =  */
+/*  function timer () {
+	time.split(" ")
+    var fiveMinutes = 60 * parseInt(time[0]),
+        display = document.querySelector('#time');
+    startTimer(fiveMinutes, display);
+}; */
+</script>
+<script>
+
+    $("#tog").toggle(function(){
+        $("#mainmap").attr('style','padding: 16px; width: 106%; height: 100%; box-sizing: content-box; position: relative; margin-bottom: 0; margin-left: auto; margin-right: auto; margin-top: auto; -webkit-box-sizing: content-box; -moz-box-sizing: content-box;');
+    }, function() {
+   $("#mainmap").attr('style','padding: 16px; width: 100%; height: 100%; box-sizing: content-box; position: relative; margin-bottom: 0; margin-left: auto; margin-right: auto; margin-top: auto; -webkit-box-sizing: content-box; -moz-box-sizing: content-box;');
+});
+</script>
+<script>
+   /* $("#map-canvas").hover(function(){
+        $("#directions-panel").show("slow");
+    }, function(){
+    $("#directions-panel").hide("slow");
+});*/
+</script>
+<script>
+idleTimer = null;
+idleState = false;
+idleWait = 18000000000;
+
+(function ($) {
+
+    $(document).ready(function () {
+
+        $('*').bind('mousemove keydown scroll', function () {
+
+            clearTimeout(idleTimer);
+
+            if (idleState == true) {
+
+                // Reactivated event
+                //$("body").append("<p>Welcome Back.</p>");
+								//window.open("login","_self");
+            }
+
+            idleState = false;
+
+            idleTimer = setTimeout(function () {
+
+                // Idle Event
+                //$("body").append("<p>You've been idle for " + idleWait/1000 + " seconds.</p>");
+								window.open("lock_screen","_self");
+
+                idleState = true; }, idleWait);
+        });
+
+        $("body").trigger("mousemove");
+
+    });
+}) (jQuery)
+
+</script>
+<script>
+$(function(){var e,a,p=$(".dials ol li"),n=$(".number");p.click(function(){e=p.index(this),9==e?n.append("*"):10==e?n.append("0"):11==e?
+n.append("#"):12==e?n.empty():13==e?(a=n.text(),a=a.slice(0,-1),n.empty().append(a)):14==e||n.append(e+1)}),$(document).keydown(function(e){switch(e.which){
+case 96:n.append("0");break;case 97:n.append("1");break;case 98:n.append("2");break;case 99:n.append("3");break;case 100:n.append("4");break;case 101:n.append("5");break;case 102:n.append("6");
+break;case 103:n.append("7");break;case 104:n.append("8");break;case 105:n.append("9");break;case 8:a=n.text(),a=a.slice(0,-1),n.empty().append(a);break;case 27:n.empty();break;case 106:n.append("*");
+break;case 35:n.append("#");break;case 13:$(".pad-action").click();break;default:return}e.preventDefault()})});
+</script>
+</body>
+</html>
